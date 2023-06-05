@@ -22,6 +22,11 @@ function Schedule() {
   const [calendar, setCalendar] = useState<Calendar>();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
 
+  // TODO: fix this
+  const parseTime = (time: string): string => {
+    return time.split(" ")[0]
+  }
+
   // TODO: clean this up
   // add fetchCalendars()
   useEffect(() => {
@@ -51,16 +56,20 @@ function Schedule() {
         <CalendarFilterDropdown setCalendar={setCalendar} />
       }
     >
+      <List.Section title="Next event">
+        <List.Item
+          key={events[0].id}
+          icon={{ source: Icon.Calendar, tintColor: Color.Blue }}
+          title={events[0].summary}
+          accessories={[{ icon: events[0].description ? Icon.Message : null }, { text: `${parseTime(new Date(events[0].start?.dateTime).toTimeString())} - ${parseTime(new Date(events[0].end?.dateTime).toTimeString())}` || "unknown" }]}
+        />
+      </List.Section>
+
       <List.Section title="Today">
         {events && events.length > 0 ? (
           events.map((event: CalendarEvent) => {
             const startDate = new Date(event.start?.dateTime)
             const endDate = new Date(event.end?.dateTime)
-
-            // TODO: fix this
-            const parseTime = (time: string): string => {
-              return time.split(" ")[0]
-            }
             
             return (
               <List.Item
