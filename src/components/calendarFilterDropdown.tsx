@@ -1,7 +1,7 @@
 import { Icon, List } from "@raycast/api";
 import { useEffect, useState } from "react";
-import { Calendar } from "../api/calendar";
 import { fetchCalendarList } from "../oauth/google";
+import { Calendar } from "../types/calendar";
 
 type FilterDropdownProps = {
   setCalendar: React.Dispatch<React.SetStateAction<Calendar | null>>;

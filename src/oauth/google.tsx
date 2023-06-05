@@ -72,9 +72,6 @@ async function refreshTokens(refreshToken: string): Promise<OAuth.TokenResponse>
 }
 
 export async function fetchCalendarList(): Promise<{ calendars: Calendar[] }> {
-  console.log("===============")
-  console.log("MADE IT HERE #1")
-
   const response = await fetch("https://www.googleapis.com/calendar/v3/users/me/calendarList", {
       headers: {
         "Content-Type": "application/json",
@@ -88,13 +85,8 @@ export async function fetchCalendarList(): Promise<{ calendars: Calendar[] }> {
     }
     console.error("Error fetching calendars:", await response.text());
     throw new Error(response.statusText);
-  }
-
-  console.log("===============")
-  console.log("MADE IT HERE #2")
-  
+  }  
 
   const json = (await response.json()) as { calendars: Calendar[] }
-  console.log(json);
   return json;
 }
