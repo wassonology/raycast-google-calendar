@@ -10,6 +10,7 @@ type FilterDropdownProps = {
 export default function CalendarFilterDropdown({ setCalendar }: FilterDropdownProps) {
   const [calendarList, setCalendarList] = useState<Calendar[]>([])
 
+  // TODO: fix
   useEffect(() => {
     fetchCalendarList().then(data => {
       setCalendarList(data.items);
@@ -18,6 +19,7 @@ export default function CalendarFilterDropdown({ setCalendar }: FilterDropdownPr
   }, [])
 
   return (
+    // TODO: fix
     <List.Dropdown tooltip="Select Repository" storeValue onChange={setCalendar}>
       {calendarList && calendarList.length > 0 ? (
         <List.Dropdown.Section>

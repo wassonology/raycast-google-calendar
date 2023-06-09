@@ -1,3 +1,5 @@
+import { Attendee } from "./attendee"
+
 export type CalendarEvent = {
   kind: string 
   etag: string 
@@ -20,7 +22,7 @@ export type CalendarEvent = {
   }
   iCalUID: string 
   sequence: number 
-  attendees: object 
+  attendees: Attendee[] 
   reminders: object 
   eventType: string
 }

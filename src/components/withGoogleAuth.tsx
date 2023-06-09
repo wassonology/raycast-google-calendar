@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { authorize, client } from "../oauth/google";
+import { authorize } from "../oauth/google";
 import { Detail, MenuBarExtra, environment } from "@raycast/api";
 
 let token: string | null = null;
@@ -7,18 +7,15 @@ let token: string | null = null;
 export function withGoogleAuth(component: JSX.Element) {
   const [x, forceRerender] = useState(0);
 
-  // we use a `useMemo` instead of `useEffect` to avoid a render
   useMemo(() => {
     (async function () {
       token = await authorize();
-
       forceRerender(x + 1);
     })();
   }, []);
 
   if (!token) {
     if (environment.commandMode === "view") {
-      // Using the <List /> component makes the placeholder buggy
       return <Detail isLoading />;
     } else if (environment.commandMode === "menu-bar") {
       return <MenuBarExtra isLoading />;
