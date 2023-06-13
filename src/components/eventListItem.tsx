@@ -55,8 +55,10 @@ export default function EventListItem({ event }: EventListItemProps) {
       ]}
       actions={
         <ActionPanel>
-          <Action.OpenInBrowser url={event.hangoutLink || event.location || "https://calendar.google.com/calendar/u/1/r"}/>
-          <Action title="Log out" onAction={() => logOut()} />
+          <Action.OpenInBrowser
+            url={event.hangoutLink || event.location || "https://calendar.google.com/calendar/u/1/r"}
+          />
+          <Action title="Log Out" onAction={() => logOut()} />
         </ActionPanel>
       }
     />
