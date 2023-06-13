@@ -1,13 +1,22 @@
 export function parseTime(rule: "start" | "end", time: string): string {
-  const parsedTime = time.split(" ")[0].slice(0,5);
-  const hour = parsedTime.slice(0,2);
-  const minutes = parsedTime.slice(2,5);
+  const formattedTime = time.split(" ")[0].slice(0,5);
+  const hour = formattedTime.slice(0,2);
+  const minutes = formattedTime.slice(2,5);
   let twelveHourFormat: string;
 
-  if (Number(hour) <= 12) return parsedTime + (rule == "start" ? "" : " am")
+  if (Number(hour) <= 12) return stripZero(formattedTime) + (rule == "start" ? "" : " am")
 
   const formattedHour = (Number(hour) - 12).toString();
   twelveHourFormat = formattedHour + minutes;
 
   return twelveHourFormat + (rule == "end" ? " pm" : "")
+}
+
+export function currentlyActive(): boolean {
+  return true;
+}
+
+function stripZero(time: string): string {
+  if(time.charAt(0) == "0") { return time.slice(1,5) }
+  return time;
 }

@@ -25,4 +25,6 @@ export type CalendarEvent = {
   attendees: Attendee[] 
   reminders: object 
   eventType: string
+  hangoutLink: string
+  location: string
 }

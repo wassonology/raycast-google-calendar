@@ -1,9 +1,10 @@
-import { OAuth, Toast, showToast } from "@raycast/api";
+import { OAuth } from "@raycast/api";
 import fetch from "node-fetch";
 import { Calendar } from "../types/calendar";
-import { useFetch } from "@raycast/utils";
+import { Profile } from "../types/profile";
+import useClientId from "../hooks/useClientId";
 
-const clientId = "414984308648-tjq5081ag1h4j6b281bbq3ilte3oule0.apps.googleusercontent.com";
+const clientId = useClientId();
 
 export const client = new OAuth.PKCEClient({
   redirectMethod: OAuth.RedirectMethod.AppURI,
@@ -29,7 +30,7 @@ export async function authorize() {
     endpoint: "https://accounts.google.com/o/oauth2/v2/auth",
     clientId: clientId,
     scope:
-      "https://www.googleapis.com/auth/calendar.settings.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.events.readonly https://www.googleapis.com/auth/calendar.readonly",
+      "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.settings.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.events.readonly https://www.googleapis.com/auth/calendar.readonly",
   });
 
   const { authorizationCode } = await client.authorize(authRequest);
@@ -50,7 +51,8 @@ async function fetchTokens(authRequest: OAuth.AuthorizationRequest, authCode: st
   const response = await fetch("https://oauth2.googleapis.com/token", { method: "POST", body: params });
   if (!response.ok) {
     console.error("fetch tokens error:", await response.text());
-    throw new Error(response.statusText);
+    resetOAuthTokens();
+    authorize();
   }
   return (await response.json()) as OAuth.TokenResponse;
 }
@@ -64,7 +66,8 @@ async function refreshTokens(refreshToken: string): Promise<OAuth.TokenResponse>
   const response = await fetch("https://oauth2.googleapis.com/token", { method: "POST", body: params });
   if (!response.ok) {
     console.error("refresh tokens error:", await response.text());
-    throw new Error(response.statusText);
+    resetOAuthTokens();
+    authorize();
   }
   const tokenResponse = (await response.json()) as OAuth.TokenResponse;
   tokenResponse.refresh_token = tokenResponse.refresh_token ?? refreshToken;
@@ -76,7 +79,7 @@ export async function fetchCalendarList(): Promise<{ calendars: Calendar[] }> {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${(await client.getTokens())?.accessToken}`,
-      },
+      }
   });
 
   if (!response.ok) {
@@ -89,4 +92,21 @@ export async function fetchCalendarList(): Promise<{ calendars: Calendar[] }> {
 
   const json = (await response.json()) as { calendars: Calendar[] }
   return json;
+}
+
+export async function resetOAuthTokens(): Promise<void> {
+  await client.removeTokens();
+}
+
+export async function getEmail() {
+  const token = (await client.getTokens())?.accessToken
+  const url = "https://www.googleapis.com/oauth2/v2/userinfo";
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    }
+  })
+  const data = await response.json() as { email: Profile };
+  return data.email;
 }

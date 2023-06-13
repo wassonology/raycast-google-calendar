@@ -1,13 +1,12 @@
 import fetch from "node-fetch";
-import { client } from "../oauth/google";
+import { client, getEmail } from "../oauth/google";
 import { CalendarEvent } from "../types/event";
-import { endOfCurrentMonthAsISOString, todayAsISOString } from "../helpers/date";
+import { endOfCurrentMonthAsISO, todayAsISO } from "../helpers/date";
 
-export async function fetchEvents(calendarId: string): Promise<{ items: CalendarEvent[] }> {  
+export async function fetchEvents(): Promise<{ items: CalendarEvent[] }> {  
   const token = (await client.getTokens())?.accessToken
-  const url = `https://www.googleapis.com/calendar/v3/calendars/austin.mcdowell@shop-ware.com/events/?${getEventParams()}`;
-  // TODO: fix this
-  const url2 = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`;
+  const calendarId = (await getEmail())
+  const url = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events/?${getEventParams()}`;
 
   const response = await fetch(url, {
       headers: {
@@ -31,8 +30,8 @@ function getEventParams() {
   params.append("singleEvents", "true");
   params.append("orderBy", "startTime");
   params.append("timeZone", timezone);
-  params.append("timeMin", todayAsISOString());
-  params.append("timeMax", endOfCurrentMonthAsISOString());
+  params.append("timeMin", todayAsISO());
+  params.append("timeMax", endOfCurrentMonthAsISO());
 
   return params.toString();
 }
