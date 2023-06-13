@@ -7,12 +7,12 @@ export function eventDateString(event: CalendarEvent): string {
 }
 
 export function eventGroupByDate(date: number, events: CalendarEvent[]): CalendarEvent[] {
-  const eventsAtDate: CalendarEvent[] =[]
-  events.map(event => { 
+  const eventsAtDate: CalendarEvent[] = [];
+  events.map((event) => {
     if (date == Number(eventDateString(event))) {
       eventsAtDate.push(event);
     }
-  })
+  });
   return eventsAtDate;
 }
 
@@ -20,10 +20,7 @@ export function eventsDateRange(): Array<number> {
   const todaysDate = numericalDate(todayAsISO());
   const endOfMonthDate = numericalDate(endOfCurrentMonthAsISO());
 
-  const dateRange = Array.from(
-    { length: endOfMonthDate - todaysDate + 1 },
-    (value, index) => todaysDate + index
-  );
+  const dateRange = Array.from({ length: endOfMonthDate - todaysDate + 1 }, (value, index) => todaysDate + index);
   return dateRange;
 }
 
@@ -47,26 +44,38 @@ export function todayAsISO(): string {
 }
 
 export function endOfCurrentMonthAsISO(): string {
-  var today = new Date();
-  return new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString()
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString();
 }
 
 export function currentMonth(): string {
-  switch(moment().month()) {
-    case 0: return "Jan"
-    case 1: return "Feb"
-    case 2: return "Mar"
-    case 3: return "Apr"
-    case 4: return "May"
-    case 5: return "Jun"
-    case 6: return "Jul"
-    case 7: return "Aug"
-    case 8: return "Sep"
-    case 9: return "Oct"
-    case 10: return "Nov"
-    case 11: return "Dec"
+  switch (moment().month()) {
+    case 0:
+      return "Jan";
+    case 1:
+      return "Feb";
+    case 2:
+      return "Mar";
+    case 3:
+      return "Apr";
+    case 4:
+      return "May";
+    case 5:
+      return "Jun";
+    case 6:
+      return "Jul";
+    case 7:
+      return "Aug";
+    case 8:
+      return "Sep";
+    case 9:
+      return "Oct";
+    case 10:
+      return "Nov";
+    case 11:
+      return "Dec";
   }
-  return "Unknown"
+  return "Unknown";
 }
 
 function numericalDate(dateTime: string): number {
@@ -74,5 +83,5 @@ function numericalDate(dateTime: string): number {
 }
 
 function firstSecondOfDate(date: string): string {
-  return date.slice(0, 10) + "T00:01:00Z"
+  return date.slice(0, 10) + "T00:01:00Z";
 }

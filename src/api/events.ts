@@ -3,16 +3,16 @@ import { client, getEmail } from "../oauth/google";
 import { CalendarEvent } from "../types/event";
 import { endOfCurrentMonthAsISO, todayAsISO } from "../helpers/date";
 
-export async function fetchEvents(): Promise<{ items: CalendarEvent[] }> {  
-  const token = (await client.getTokens())?.accessToken
-  const calendarId = (await getEmail())
+export async function fetchEvents(): Promise<{ items: CalendarEvent[] }> {
+  const token = (await client.getTokens())?.accessToken;
+  const calendarId = await getEmail();
   const url = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events/?${getEventParams()}`;
 
   const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      }
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   if (!response.ok) {

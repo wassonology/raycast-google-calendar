@@ -1,7 +1,7 @@
 import { Detail, List, showToast, Toast } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { fetchEvents } from "./api/events";
-import * as google from './oauth/google';
+import * as google from "./oauth/google";
 import { withGoogleAuth } from "./components/withGoogleAuth";
 import { currentMonth, eventsDateRange } from "./helpers/date";
 import { CalendarEvent } from "./types/event";
@@ -32,24 +32,14 @@ function Schedule() {
   }
 
   return (
-    <List
-      isLoading={isLoading} 
-      searchBarPlaceholder="Filter by meeting title"
-    >
-      {
-        eventsDateRange().map((date) => {
-          return (
-            <Day key={`${month}-${date}`} month={month} date={date} events={events} />
-          )
-        })
-      }
+    <List isLoading={isLoading} searchBarPlaceholder="Filter by meeting title">
+      {eventsDateRange().map((date) => {
+        return <Day key={`${month}-${date}`} month={month} date={date} events={events} />;
+      })}
     </List>
   );
 }
 
 export default function MySchedule() {
-  return (
-    withGoogleAuth(<Schedule />)
-  );
+  return withGoogleAuth(<Schedule />);
 }
-
