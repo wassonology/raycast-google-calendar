@@ -4,6 +4,7 @@ import { eventActive, eventFinished } from "../helpers/date";
 import { parseTime } from "../helpers/time";
 import { Attendee } from "../types/attendee";
 import { CalendarEvent } from "../types/event";
+import { logOut } from "../oauth/google";
 
 type EventListItemProps = {
   event: CalendarEvent;
@@ -54,9 +55,8 @@ export default function EventListItem({ event }: EventListItemProps) {
       ]}
       actions={
         <ActionPanel>
-          <Action.OpenInBrowser
-            url={event.hangoutLink || event.location || "https://calendar.google.com/calendar/u/1/r"}
-          />
+          <Action.OpenInBrowser url={event.hangoutLink || event.location || "https://calendar.google.com/calendar/u/1/r"}/>
+          <Action title="Log out" onAction={() => logOut()} />
         </ActionPanel>
       }
     />

@@ -1,4 +1,4 @@
-import { OAuth } from "@raycast/api";
+import { OAuth, popToRoot } from "@raycast/api";
 import fetch from "node-fetch";
 import { Calendar } from "../types/calendar";
 import { Profile } from "../types/profile";
@@ -109,4 +109,9 @@ export async function getEmail() {
   });
   const data = (await response.json()) as { email: Profile };
   return data.email;
+}
+
+export async function logOut() {
+  resetOAuthTokens();
+  popToRoot();
 }

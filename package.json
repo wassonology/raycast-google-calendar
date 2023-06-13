@@ -12,8 +12,8 @@
   "commands": [
     {
       "name": "index",
-      "title": "My schedule",
-      "description": "View and interact with today's Google Calendar events.",
+      "title": "My Schedule",
+      "description": "View and interact with Google Calendar events for the upcoming week.",
       "icon": "google-calendar-logo.png",
       "mode": "view"
     }
